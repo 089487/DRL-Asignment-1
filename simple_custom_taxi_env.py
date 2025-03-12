@@ -96,7 +96,7 @@ class SimpleTaxiEnv():
         self.current_fuel -= 1
         if self.current_fuel <= 0:
             return self.get_state(), reward -10, True, {}
-
+        
         
 
         return self.get_state(), reward, False, {}
