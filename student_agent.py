@@ -14,12 +14,18 @@ goal_id = -1
 pickup = False
 pickup_id = 4
 drop_id = 5
+def cmp(a,b):
+    if a>b:
+        return 1
+    if a<b:
+        return -1
+    return 0
 def get_state_obs(obs):
     global stations,goal_id,pickup
     taxi_row, taxi_col, stations[0][0], stations[0][1] , stations[1][0], stations[1][1],stations[2][0],stations[2][1],stations[3][0],stations[3][1],obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look = obs
     if goal_id == -1:
         goal_id = np.random.randint(4)
-    relative_pos = (taxi_row-stations[goal_id][0],taxi_col-stations[goal_id][1])
+    relative_pos = (cmp(taxi_row,stations[goal_id][0]),cmp(taxi_col,stations[goal_id][1]))
     return relative_pos,(obstacle_north,obstacle_south,obstacle_east,obstacle_west),passenger_look,destination_look,pickup
 def get_action(obs):
     # TODO: Train your own agent
