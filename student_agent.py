@@ -28,9 +28,11 @@ def get_action(obs):
     #       To prevent crashes, implement a fallback strategy for missing keys. 
     #       Otherwise, even if your agent performs well in training, it may fail during testing.
     state = get_state_obs(obs)
-    relative_pos,obstacles,passenger_look,_,_ = state
-
-    action = np.argmax(q_table[state])
+    relative_pos,_,passenger_look,_,_ = state
+    if state not in q_table.keys():
+        action = np.random.randint(6)
+    else:
+        action = np.argmax(q_table[state])
     if action==pickup_id and relative_pos==(0,0) and passenger_look:
         pickup = True
         next_goal_id = goal_id
