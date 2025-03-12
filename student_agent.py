@@ -8,14 +8,18 @@ from collections import defaultdict
 with open('q_table.pkl', 'rb') as f:
     loaded_dict = pickle.load(f)
     q_table = defaultdict(lambda: 0, loaded_dict)  # Replace 0 with your default value
-global stations,goal_id,pickup
+global stations
+global goal_id
+global pickup
 stations = np.zeros((4,2))
 goal_id = -1
 pickup = False
 pickup_id = 4
 drop_id = 5
 def get_state_obs(obs):
-    global stations,goal_id,pickup
+    global stations
+    global goal_id
+    global pickup
     taxi_row, taxi_col, stations[0][0], stations[0][1] , stations[1][0], stations[1][1],stations[2][0],stations[2][1],stations[3][0],stations[3][1],obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look = obs
     if goal_id == -1:
         goal_id = np.random.randint(4)
@@ -28,6 +32,7 @@ def get_action(obs):
     #       To prevent crashes, implement a fallback strategy for missing keys. 
     #       Otherwise, even if your agent performs well in training, it may fail during testing.
     state = get_state_obs(obs)
+    global pickup
     relative_pos,_,passenger_look,_,_ = state
     if state not in q_table.keys():
         action = np.random.randint(6)
