@@ -21,7 +21,7 @@ pickup=False
 action_size = 6
 pickup_id = 4
 drop_id = 5
-np.random.seed(42)
+#np.random.seed(42)
 def cmp(a,b):
     #return a-b
     if a>b:
