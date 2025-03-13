@@ -5,6 +5,9 @@ import random
 import gym
 import pickle
 from collections import defaultdict
+"""
+q_table trained by https://colab.research.google.com/gist/089487/1d4c77b205b8a212deb47fcbb2fc3609/drl_assignment1_q4.ipynb?authuser=1
+"""
 with open('q_table.pkl', 'rb') as f:
     loaded_dict = pickle.load(f)
     q_table = defaultdict(lambda: 0, loaded_dict)  # Replace 0 with your default value
