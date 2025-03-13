@@ -18,11 +18,12 @@ action_size = 6
 pickup_id = 4
 drop_id = 5
 def cmp(a,b):
-    if a>b:
+    return a-b
+    """if a>b:
         return 1
     if a<b:
         return -1
-    return 0
+    return 0"""
 last_action = None
 def get_state_obs(obs,action):
     global stations,goal_id,pickup,candidates_p,candidates_goal
@@ -100,8 +101,11 @@ def get_action(obs):
     global last_action
     state = get_state_obs(obs,last_action)
     if state not in q_table.keys():
+        #print(state)
+        #assert(0)
         action = np.random.randint(action_size)
     else:
+        
         action = np.argmax(q_table[state])
     last_action=action
     return action # Choose a random action
