@@ -94,7 +94,7 @@ def get_state_obs(obs,action):
     #print(candidates_p)
     relative_pos = (cmp(taxi_row,stations[goal_id][0]),cmp(taxi_col,stations[goal_id][1]))
     look_tag = passenger_look if not pickup else destination_look
-    #print(f'p : {candidates_p}, goal : {candidates_goal}, pickup : {pickup}, goal_id, {goal_id},passenger_look {passenger_look}')
+    print(f'pos : {agent_pos}, relative_pos {relative_pos} , p : {candidates_p}, goal : {candidates_goal}, pickup : {pickup}, goal_id, {goal_id},passenger_look {passenger_look},obstacles {(obstacle_north,obstacle_south,obstacle_east,obstacle_west)}')
     return (relative_pos,pickup, goal_id,len(candidates_p), len(candidates_goal), look_tag, (obstacle_north,obstacle_south,obstacle_east,obstacle_west))
 def get_action(obs):
     # TODO: Train your own agent
