@@ -9,6 +9,7 @@ from collections import defaultdict
 q_table trained by https://colab.research.google.com/gist/089487/c7f8378a68e6050c82ddd22463299981/drl_assignment1_q4.ipynb?authuser=1
 """
 with open('q_table.pkl', 'rb') as f:
+    print('load')
     loaded_dict = pickle.load(f)
     q_table = defaultdict(lambda: 0, loaded_dict)  # Replace 0 with your default value
 global stations, candidates_p,candidates_goal, pickup, goal_id,last_action
@@ -94,7 +95,7 @@ def get_state_obs(obs,action):
     #print(candidates_p)
     relative_pos = (cmp(taxi_row,stations[goal_id][0]),cmp(taxi_col,stations[goal_id][1]))
     look_tag = passenger_look if not pickup else destination_look
-    print(f'pos : {agent_pos}, relative_pos {relative_pos} , p : {candidates_p}, goal : {candidates_goal}, pickup : {pickup}, goal_id, {goal_id},passenger_look {passenger_look},obstacles {(obstacle_north,obstacle_south,obstacle_east,obstacle_west)}')
+    #print(f'pos : {agent_pos}, relative_pos {relative_pos} , p : {candidates_p}, goal : {candidates_goal}, pickup : {pickup}, goal_id, {goal_id},passenger_look {passenger_look},obstacles {(obstacle_north,obstacle_south,obstacle_east,obstacle_west)}')
     return (relative_pos,pickup, goal_id,len(candidates_p), len(candidates_goal), look_tag, (obstacle_north,obstacle_south,obstacle_east,obstacle_west))
 def get_action(obs):
     # TODO: Train your own agent
