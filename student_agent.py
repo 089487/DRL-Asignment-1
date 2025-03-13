@@ -6,7 +6,7 @@ import gym
 import pickle
 from collections import defaultdict
 """
-q_table trained by https://colab.research.google.com/gist/089487/1d4c77b205b8a212deb47fcbb2fc3609/drl_assignment1_q4.ipynb?authuser=1
+q_table trained by https://colab.research.google.com/gist/089487/c7f8378a68e6050c82ddd22463299981/drl_assignment1_q4.ipynb?authuser=1
 """
 with open('q_table.pkl', 'rb') as f:
     loaded_dict = pickle.load(f)
@@ -22,12 +22,12 @@ pickup_id = 4
 drop_id = 5
 np.random.seed(42)
 def cmp(a,b):
-    return a-b
-    """if a>b:
+    #return a-b
+    if a>b:
         return 1
     if a<b:
         return -1
-    return 0"""
+    return 0
 last_action = None
 def get_state_obs(obs,action):
     global stations,goal_id,pickup,candidates_p,candidates_goal
