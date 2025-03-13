@@ -6,13 +6,14 @@ import gym
 import pickle
 from collections import defaultdict
 """
-q_table trained by https://colab.research.google.com/gist/089487/b9b6cc86dacac513f67acc65ebad0e2e/drl_assignment1_q4.ipynb
+q_table trained by https://colab.research.google.com/gist/089487/37524a00ed8eaad835dad160a3a6d9b5/drl_assignment1_q4.ipynb
 """
 with open('q_table.pkl', 'rb') as f:
     print('load')
     loaded_dict = pickle.load(f)
     q_table = defaultdict(lambda: 0, loaded_dict)  # Replace 0 with your default value
-global stations, candidates_p,candidates_goal, pickup, goal_id,last_action
+
+global stations, candidates_p,candidates_goal, pickup, goal_id,lst_action
 stations = [[0,0] for _ in range(4)]
 candidates_p = [i for i in stations]
 candidates_goal = [i for i in stations]
@@ -21,7 +22,7 @@ pickup=False
 action_size = 6
 pickup_id = 4
 drop_id = 5
-#np.random.seed(42)
+last_action = None
 def cmp(a,b):
     #return a-b
     if a>b:
@@ -29,7 +30,6 @@ def cmp(a,b):
     if a<b:
         return -1
     return 0
-last_action = None
 def get_state_obs(obs,action):
     global stations,goal_id,pickup,candidates_p,candidates_goal
     #print(candidates_p)
@@ -61,15 +61,13 @@ def get_state_obs(obs,action):
         candidates_p = [agent_pos]
         #print('drop at',agent_pos)
         goal_id = 0
-    
+
     elif relative_pos == (0,0):
-        #print(f'Before p : {candidates_p}, goal : {candidates_goal}, pickup : {pickup}, goal_id, {goal_id}')
         if passenger_look:
             candidates_p = [agent_pos]
             if not pickup:
                 goal_id = 0
         else:
-            #print(agent_pos,'not passenger look')
             if agent_pos in candidates_p:
                 candidates_p.remove(agent_pos)
             if not pickup:
@@ -87,15 +85,9 @@ def get_state_obs(obs,action):
                 candidates_goal.remove(agent_pos)
             if pickup:
                 goal_id = np.random.choice(len(candidates_goal))
-        #print(f'After p : {candidates_p}, goal : {candidates_goal}, pickup : {pickup}, goal_id, {goal_id}')
-        #print(f'Real passenger : {p_loc},ifpick up{ifpickup}')
-        """if action==pickup_id and ifpickup:
-            print(agent_pos,candidates_p)
-            print(agent_pos in candidates_p)"""
-    #print(candidates_p)
     relative_pos = (cmp(taxi_row,stations[goal_id][0]),cmp(taxi_col,stations[goal_id][1]))
     look_tag = passenger_look if not pickup else destination_look
-    #print(f'pos : {agent_pos}, relative_pos {relative_pos} , p : {candidates_p}, goal : {candidates_goal}, pickup : {pickup}, goal_id, {goal_id},passenger_look {passenger_look},obstacles {(obstacle_north,obstacle_south,obstacle_east,obstacle_west)}')
+    #print(f'agent_pos : {agent_pos} p : {candidates_p}, goal : {candidates_goal}, pickup : {pickup}, goal_id, {goal_id},passenger_look {passenger_look}, obstacles : {(obstacle_north,obstacle_south,obstacle_east,obstacle_west)}')
     return (relative_pos,pickup, goal_id,len(candidates_p), len(candidates_goal), look_tag, (obstacle_north,obstacle_south,obstacle_east,obstacle_west))
 def get_action(obs):
     # TODO: Train your own agent
@@ -109,7 +101,7 @@ def get_action(obs):
         assert(0)
         action = np.random.randint(action_size)
     else:
-        
+        print(q_table[state])
         action = np.argmax(q_table[state])
     last_action=action
     return action # Choose a random action
