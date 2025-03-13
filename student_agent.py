@@ -101,6 +101,7 @@ def get_action(obs):
     global last_action
     state = get_state_obs(obs,last_action)
     if state not in q_table.keys():
+        assert(0)
         action = np.random.randint(action_size)
     else:
         
