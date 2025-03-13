@@ -17,6 +17,7 @@ pickup=False
 action_size = 6
 pickup_id = 4
 drop_id = 5
+np.random.seed(42)
 def cmp(a,b):
     return a-b
     """if a>b:
@@ -101,7 +102,7 @@ def get_action(obs):
     global last_action
     state = get_state_obs(obs,last_action)
     if state not in q_table.keys():
-        assert(0)
+        #assert(0)
         action = np.random.randint(action_size)
     else:
         
