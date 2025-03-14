@@ -47,7 +47,7 @@ def get_state_obs(obs,action):
         #print('after p',candidates_p)
     else:
         #print('before p',candidates_p)
-        candidates_p = [ tuple(x) for x in candidates_p if x != agent_pos ]
+        candidates_p = [ tuple(x) for x in candidates_p if abs(x[0]-agent_pos[0])+abs(x[1]-agent_pos[1]) >1 ]
         #print('after p',candidates_p)
     if destination_look:
         #print('before g',candidates_goal)
@@ -55,8 +55,8 @@ def get_state_obs(obs,action):
         #print('after g',candidates_goal)
     else:
         #print('before g',candidates_goal)
-        candidates_goal = [ tuple(x) for x in candidates_goal if x!=agent_pos ]
-        #print('after g',candidates_goal)
+        candidates_goal = [ tuple(x) for x in candidates_goal if abs(x[0]-agent_pos[0])+abs(x[1]-agent_pos[1]) >1 ]
+            #print('after g',candidates_goal)
     if action==pickup_id and not pickup and agent_pos in candidates_p:
         pickup = True
         candidates_p = []
