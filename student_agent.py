@@ -6,7 +6,7 @@ import gym
 import pickle
 from collections import defaultdict
 """
-q_table trained by https://colab.research.google.com/gist/089487/a09ca81bba628a9970d50a2009f02a9e/drl_assignment1_q4.ipynb
+q_table trained by https://colab.research.google.com/gist/089487/bd898be4a527f5513a5272622a8f17c2/drl_assignment1_q4.ipynb
 """
 with open('q_table.pkl', 'rb') as f:
     print('load')
