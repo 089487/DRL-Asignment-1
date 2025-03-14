@@ -92,7 +92,7 @@ def get_action(obs):
         #print(q_table[state])
         action = np.argmax(q_table[state])
     next_state = get_state_obs(obs,action)
-    q_table[state][action] = q_table[state][action] + 0.1*(-0.1+0.99*np.max(q_table[next_state])-q_table[state][action])
+    q_table[state][action] = q_table[state][action] + 0.089487*(-0.1+0.89487*np.max(q_table[next_state])-q_table[state][action])
     last_action=action
     return action # Choose a random action
     # You can submit this random agent to evaluate the performance of a purely random strategy.
