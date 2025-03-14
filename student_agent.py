@@ -27,7 +27,10 @@ last_action = None
 pickup_id = 4
 drop_id = 5
 def cmp(a,b):
-    return a!=b
+        if a==b:
+            return 0
+        return 1 if a<b else -1
+            
 def get_state_obs(obs,action):
     global stations,pickup,candidates_p,candidates_goal
     #print(candidates_p)
@@ -44,7 +47,7 @@ def get_state_obs(obs,action):
         #print('after p',candidates_p)
     else:
         #print('before p',candidates_p)
-        candidates_p = [ tuple(x) for x in candidates_p if abs(x[0]-agent_pos[0])+abs(x[1]-agent_pos[1]) >1 ]
+        candidates_p = [ tuple(x) for x in candidates_p if x != agent_pos ]
         #print('after p',candidates_p)
     if destination_look:
         #print('before g',candidates_goal)
@@ -52,14 +55,14 @@ def get_state_obs(obs,action):
         #print('after g',candidates_goal)
     else:
         #print('before g',candidates_goal)
-        candidates_goal = [ tuple(x) for x in candidates_goal if abs(x[0]-agent_pos[0])+abs(x[1]-agent_pos[1]) >1 ]
+        candidates_goal = [ tuple(x) for x in candidates_goal if x!=agent_pos ]
         #print('after g',candidates_goal)
     if action==pickup_id and not pickup and agent_pos in candidates_p:
         pickup = True
         candidates_p = []
     elif action == drop_id and pickup:
         pickup=False
-        candidates_p = [agent_pos]
+        candidates_p.append(agent_pos)
     cmp_pos = (0,0)
     if not pickup:
         cmp_pos = candidates_p[0]
@@ -67,8 +70,9 @@ def get_state_obs(obs,action):
         cmp_pos = candidates_goal[0]
     passenger_look = passenger_look and agent_pos in candidates_p
     destination_look = destination_look and agent_pos in candidates_goal
-    #relative_pos = (cmp(agent_pos[0],cmp_pos[0]),cmp(agent_pos[1],cmp_pos[1]))
-    return (pickup, len(candidates_p), len(candidates_goal), passenger_look, destination_look, (obstacle_north,obstacle_south,obstacle_east,obstacle_west))
+    relative_pos = (cmp(agent_pos[0],cmp_pos[0]),cmp(agent_pos[1],cmp_pos[1]))
+    return (relative_pos,pickup, passenger_look, destination_look, (obstacle_north,obstacle_south,obstacle_east,obstacle_west))
+
 def get_action(obs):
     # TODO: Train your own agent
     # HINT: If you're using a Q-table, consider designing a custom key based on `obs` to store useful information.
@@ -86,10 +90,7 @@ def get_action(obs):
         action = np.random.randint(action_size)
     else:
         #print(q_table[state])
-        if np.random.choice(2,p=[0.05,0.95])==1:
-            action = np.argmax(q_table[state])
-        else:
-            action = np.random.randint(6)
+        action = np.argmax(q_table[state])
     last_action=action
     return action # Choose a random action
     # You can submit this random agent to evaluate the performance of a purely random strategy.
