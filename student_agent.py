@@ -9,7 +9,7 @@ from collections import defaultdict
 q_table trained by https://colab.research.google.com/gist/089487/bd898be4a527f5513a5272622a8f17c2/drl_assignment1_q4.ipynb
 """
 np.random.seed(42)
-random.seed(42)
+#random.seed(42)
 with open('q_table.pkl', 'rb') as f:
     print('load')
     loaded_dict = pickle.load(f)
@@ -84,7 +84,10 @@ def get_action(obs):
         action = np.random.randint(action_size)
     else:
         #print(q_table[state])
-        action = np.argmax(q_table[state])
+        if np.random.choice(2,p=[0.05,0.95])==1:
+            action = np.argmax(q_table[state])
+        else:
+            action = np.random.randint(6)
     last_action=action
     return action # Choose a random action
     # You can submit this random agent to evaluate the performance of a purely random strategy.
