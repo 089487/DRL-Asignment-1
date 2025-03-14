@@ -13,7 +13,7 @@ q_table trained by https://colab.research.google.com/gist/089487/bd898be4a527f55
 with open('q_table.pkl', 'rb') as f:
     print('load')
     loaded_dict = pickle.load(f)
-    q_table = defaultdict(lambda: np.zeros(6), loaded_dict)  # Replace 0 with your default value
+    q_table = loaded_dict  # Replace 0 with your default value
 
 #print('len of q_table',len(q_table.keys()))
 global stations, candidates_p,candidates_goal, pickup, last_action
