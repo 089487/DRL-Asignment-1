@@ -27,16 +27,10 @@ last_action = None
 pickup_id = 4
 drop_id = 5
 def cmp(a,b):
-    #return a-b
-    if a>b:
-        return 1
-    if a<b:
-        return -1
-    return 0
+    return a!=b
 def get_state_obs(obs,action):
     global stations,pickup,candidates_p,candidates_goal
     #print(candidates_p)
-    obstacles = [0 for _ in range(5)]
     taxi_row, taxi_col, stations[0][0], stations[0][1] , stations[1][0], stations[1][1],stations[2][0],stations[2][1],stations[3][0],stations[3][1],obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look = obs
     agent_pos = (taxi_row,taxi_col)
     if action==None:
@@ -66,6 +60,14 @@ def get_state_obs(obs,action):
     elif action == drop_id and pickup:
         pickup=False
         candidates_p = [agent_pos]
+    cmp_pos = (0,0)
+    if not pickup:
+        cmp_pos = candidates_p[0]
+    else:
+        cmp_pos = candidates_goal[0]
+    passenger_look = passenger_look and agent_pos in candidates_p
+    destination_look = destination_look and agent_pos in candidates_goal
+    #relative_pos = (cmp(agent_pos[0],cmp_pos[0]),cmp(agent_pos[1],cmp_pos[1]))
     return (pickup, len(candidates_p), len(candidates_goal), passenger_look, destination_look, (obstacle_north,obstacle_south,obstacle_east,obstacle_west))
 def get_action(obs):
     # TODO: Train your own agent
