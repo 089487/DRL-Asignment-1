@@ -71,7 +71,7 @@ def get_state_obs(obs,action):
     passenger_look = passenger_look and agent_pos in candidates_p
     destination_look = destination_look and agent_pos in candidates_goal
     relative_pos = (cmp(agent_pos[0],cmp_pos[0]),cmp(agent_pos[1],cmp_pos[1]))
-    return (relative_pos,pickup, passenger_look, destination_look, (obstacle_north,obstacle_south,obstacle_east,obstacle_west))
+    return (relative_pos,pickup, passenger_look, destination_look, (obstacle_north,obstacle_south,obstacle_east,obstacle_west),action)
 
 def get_action(obs):
     # TODO: Train your own agent
@@ -86,7 +86,7 @@ def get_action(obs):
     #print(state)
     if state not in q_table.keys():
         print(state)
-        #assert(0)
+        assert(0)
         action = np.random.randint(action_size)
     else:
         #print(q_table[state])
