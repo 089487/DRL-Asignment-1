@@ -86,7 +86,7 @@ def get_action(obs):
     #print(state)
     if state not in q_table.keys():
         print(state)
-        assert(0)
+        #assert(0)
         action = np.random.randint(action_size)
     else:
         #print(q_table[state])
