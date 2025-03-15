@@ -16,7 +16,7 @@ with open('q_table.pkl', 'rb') as f:
     q_table = loaded_dict  # Replace 0 with your default value
 
 #print('len of q_table',len(q_table.keys()))
-global stations, candidates_p,candidates_goal, pickup, last_action, last_last_action
+global stations, candidates_p,candidates_goal, pickup, last_action, last_record_action
 stations = [[0,0] for _ in range(4)]
 candidates_p = [i for i in stations]
 candidates_goal = [i for i in stations]
@@ -24,7 +24,7 @@ goal_id = -1
 pickup=False
 action_size = 6
 last_action = None
-last_last_action = None
+last_record_action = None
 pickup_id = 4
 drop_id = 5
 def cmp(a,b):
@@ -72,7 +72,7 @@ def get_state_obs(obs,action,last_action=None):
     passenger_look = passenger_look and agent_pos in candidates_p
     destination_look = destination_look and agent_pos in candidates_goal
     relative_pos = (cmp(agent_pos[0],cmp_pos[0]),cmp(agent_pos[1],cmp_pos[1]))
-    return (relative_pos,pickup, passenger_look, destination_look, (obstacle_north,obstacle_south,obstacle_east,obstacle_west),action,last_action)
+    return (relative_pos,pickup, passenger_look, destination_look, (obstacle_north,obstacle_south,obstacle_east,obstacle_west),last_action)
 
 def get_action(obs):
     # TODO: Train your own agent
@@ -80,19 +80,19 @@ def get_action(obs):
     # NOTE: Keep in mind that your Q-table may not cover all possible states in the testing environment.
     #       To prevent crashes, implement a fallback strategy for missing keys.
     #       Otherwise, even if your agent performs well in training, it may fail during testing.
-    global last_action,last_last_action
-    state = get_state_obs(obs,last_action,last_last_action)
+    global last_action,last_record_action
+    state = get_state_obs(obs,last_action,last_record_action)
     action_name = ['Move North','Move South','Move East','Move West','Pick Up','Drop Off']
     if state not in q_table.keys():
         #print(state)
         print(state)
-
-        #assert(0)
+        assert(0)
         action = np.random.randint(action_size)
     else:
         #print(state,action_name[np.argmax(q_table[state])])
         action = np.argmax(q_table[state])
+    last_action = action
+    if action in [0,1,2,3]:
+        last_record_action = action
     #q_table[state][action] = q_table[state][action] + 0.089487*(-0.1+0.89487*np.max(q_table[state])-q_table[state][action])
-    last_last_action=last_action
-    last_action=action
     return action # Choose a random action
