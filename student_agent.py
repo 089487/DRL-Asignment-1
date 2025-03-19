@@ -66,9 +66,13 @@ def get_state_obs(obs,action,last_action=None):
         candidates_p.append(agent_pos)
     cmp_pos = (0,0)
     if not pickup:
-        cmp_pos = candidates_p[0]
+        # choose the one that is closest to the agent
+        idx = np.argmin([abs(agent_pos[0]-i[0])+abs(agent_pos[1]-i[1]) for i in candidates_p])
+        cmp_pos = candidates_p[idx]
     else:
-        cmp_pos = candidates_goal[0]
+        # choose the one that is closest to the agent
+        idx = np.argmin([abs(agent_pos[0]-i[0])+abs(agent_pos[1]-i[1]) for i in candidates_goal])
+        cmp_pos = candidates_goal[idx]
     passenger_look = passenger_look and agent_pos in candidates_p
     destination_look = destination_look and agent_pos in candidates_goal
     relative_pos = (cmp(agent_pos[0],cmp_pos[0]),cmp(agent_pos[1],cmp_pos[1]))
