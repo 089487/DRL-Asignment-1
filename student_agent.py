@@ -8,7 +8,7 @@ from collections import defaultdict
 """
 q_table trained by https://colab.research.google.com/gist/089487/bd898be4a527f5513a5272622a8f17c2/drl_assignment1_q4.ipynb
 """
-#np.random.seed(42)
+np.random.seed(42)
 #random.seed(42)
 with open('q_table.pkl', 'rb') as f:
     print('load')
@@ -94,6 +94,7 @@ def get_action(obs):
         action = np.random.randint(action_size)
     else:
         #print(state,action_name[np.argmax(q_table[state])])
+        q_table[state] = np.array(q_table[state])
         action = np.argmax(q_table[state])
     last_action = action
     if action in [0,1,2,3]:
