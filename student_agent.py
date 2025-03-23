@@ -61,9 +61,9 @@ def get_state_obs(obs,action,last_action=None):
         #print('after g',candidates_goal)
     reward_shaping = -0.1
     if action==pickup_id and (pickup or not agent_pos in candidates_p):
-        reward_shaping -=10
-    if action==drop_id and not pickup:
-        reward_shaping -=10
+        reward_shaping -=20
+    if action==drop_id and (not pickup or not agent_pos in candidates_goal):
+        reward_shaping -=20
     if action == 0 and obstacle_south:
         reward_shaping -=10
     if action == 1 and obstacle_north:
