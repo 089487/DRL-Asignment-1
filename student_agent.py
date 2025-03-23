@@ -13,7 +13,8 @@ np.random.seed(42)
 with open('q_table.pkl', 'rb') as f:
     print('load')
     loaded_dict = pickle.load(f)
-    q_table = loaded_dict  # Replace 0 with your default value
+    q_table_list = loaded_dict  # Replace 0 with your default value
+    q_table = {k:np.array(v) for k,v in q_table_list.items()}
 
 #print('len of q_table',len(q_table.keys()))
 global stations, candidates_p,candidates_goal, pickup, last_action, last_record_action
@@ -75,8 +76,9 @@ def get_state_obs(obs,action,last_action=None):
         cmp_pos = candidates_goal[idx]
     passenger_look = passenger_look and agent_pos in candidates_p
     destination_look = destination_look and agent_pos in candidates_goal
+    real_look = passenger_look if not pickup else destination_look
     relative_pos = (cmp(agent_pos[0],cmp_pos[0]),cmp(agent_pos[1],cmp_pos[1]))
-    return (relative_pos,pickup, passenger_look, destination_look, (obstacle_north,obstacle_south,obstacle_east,obstacle_west),last_action)
+    return (relative_pos,pickup,real_look, (obstacle_north,obstacle_south,obstacle_east,obstacle_west),last_action)
 
 def get_action(obs):
     # TODO: Train your own agent
