@@ -59,6 +59,19 @@ def get_state_obs(obs,action,last_action=None):
         #print('before g',candidates_goal)
         candidates_goal = [ tuple(x) for x in candidates_goal if abs(x[0]-agent_pos[0])+abs(x[1]-agent_pos[1]) >1 ]
         #print('after g',candidates_goal)
+    reward_shaping = -0.1
+    if action==pickup_id and (pickup or not agent_pos in candidates_p):
+        reward_shaping -=10
+    if action==drop_id and not pickup:
+        reward_shaping -=10
+    if action == 0 and obstacle_south:
+        reward_shaping -=10
+    if action == 1 and obstacle_north:
+        reward_shaping -=10
+    if action == 2 and obstacle_east:
+        reward_shaping -=10
+    if action == 3 and obstacle_west:
+        reward_shaping -=10
     if action==pickup_id and not pickup and agent_pos in candidates_p:
         pickup = True
         candidates_p = []
@@ -78,7 +91,7 @@ def get_state_obs(obs,action,last_action=None):
     destination_look = destination_look and agent_pos in candidates_goal
     real_look = passenger_look if not pickup else destination_look
     relative_pos = (cmp(agent_pos[0],cmp_pos[0]),cmp(agent_pos[1],cmp_pos[1]))
-    return (relative_pos,pickup,real_look, (obstacle_north,obstacle_south,obstacle_east,obstacle_west),last_action)
+    return (relative_pos,pickup,real_look, (obstacle_north,obstacle_south,obstacle_east,obstacle_west),last_action),reward_shaping
 
 def get_action(obs):
     # TODO: Train your own agent
@@ -87,7 +100,7 @@ def get_action(obs):
     #       To prevent crashes, implement a fallback strategy for missing keys.
     #       Otherwise, even if your agent performs well in training, it may fail during testing.
     global last_action,last_record_action
-    state = get_state_obs(obs,last_action,last_record_action)
+    state,reward = get_state_obs(obs,last_action,last_record_action)
     action_name = ['Move North','Move South','Move East','Move West','Pick Up','Drop Off']
     if state not in q_table.keys():
         #print(state)
@@ -101,5 +114,5 @@ def get_action(obs):
     last_action = action
     if action in [0,1,2,3]:
         last_record_action = action
-    #q_table[state][action] = q_table[state][action] + 0.089487*(-0.1+0.89487*np.max(q_table[state])-q_table[state][action])
+    q_table[state][action] = q_table[state][action] + (reward + np.max(q_table[state])-q_table[state][action])
     return action # Choose a random action
