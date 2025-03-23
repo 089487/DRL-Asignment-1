@@ -8,7 +8,7 @@ from collections import defaultdict
 """
 q_table trained by https://colab.research.google.com/gist/089487/bd898be4a527f5513a5272622a8f17c2/drl_assignment1_q4.ipynb
 """
-#np.random.seed(42)
+np.random.seed(42)
 #random.seed(42)
 with open('q_table.pkl', 'rb') as f:
     print('load')
