@@ -3,3 +3,4 @@ requests
 argparse
 torch
 numpy
+python == 3.12.3
