@@ -60,18 +60,6 @@ def get_state_obs(obs,action,last_action=None):
         candidates_goal = [ tuple(x) for x in candidates_goal if abs(x[0]-agent_pos[0])+abs(x[1]-agent_pos[1]) >1 ]
         #print('after g',candidates_goal)
     reward_shaping = -0.1
-    if action==pickup_id and (pickup or not agent_pos in candidates_p):
-        reward_shaping -=20000
-    if action==drop_id and (not pickup or not agent_pos in candidates_goal):
-        reward_shaping -=20000
-    if action == 0 and obstacle_south:
-        reward_shaping -=20000
-    if action == 1 and obstacle_north:
-        reward_shaping -=20000
-    if action == 2 and obstacle_east:
-        reward_shaping -=20000
-    if action == 3 and obstacle_west:
-        reward_shaping -=20000
     if action==pickup_id and not pickup and agent_pos in candidates_p:
         pickup = True
         candidates_p = []
@@ -90,6 +78,18 @@ def get_state_obs(obs,action,last_action=None):
     passenger_look = passenger_look and agent_pos in candidates_p
     destination_look = destination_look and agent_pos in candidates_goal
     real_look = passenger_look if not pickup else destination_look
+    if action==pickup_id and (pickup or not real_look):
+        reward_shaping -=20
+    if action==drop_id and (not pickup or not real_look):
+        reward_shaping -=20
+    if action == 0 and obstacle_south:
+        reward_shaping -=20
+    if action == 1 and obstacle_north:
+        reward_shaping -=20
+    if action == 2 and obstacle_east:
+        reward_shaping -=20
+    if action == 3 and obstacle_west:
+        reward_shaping -=20
     relative_pos = (cmp(agent_pos[0],cmp_pos[0]),cmp(agent_pos[1],cmp_pos[1]))
     return (relative_pos,pickup,real_look, (obstacle_north,obstacle_south,obstacle_east,obstacle_west),last_action),reward_shaping
 
