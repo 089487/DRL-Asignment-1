@@ -103,9 +103,8 @@ def get_action(obs):
     state,reward = get_state_obs(obs,last_action,last_record_action)
     action_name = ['Move North','Move South','Move East','Move West','Pick Up','Drop Off']
     if state not in q_table.keys():
-        #print(state)
         print(state)
-        assert(0)
+        #assert(0)
         action = np.random.randint(action_size)
     else:
         #print(state,action_name[np.argmax(q_table[state])])
